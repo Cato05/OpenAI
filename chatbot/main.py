@@ -7,6 +7,7 @@ def configure():
 
 
 def main():
+    configure()
     client = OpenAI(api_key=os.getenv("apiKey"))
 
     message = input("User: ")
