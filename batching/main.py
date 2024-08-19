@@ -42,6 +42,12 @@ def deleteInputFile():
 
 
 def main():
+    for _, row in df[:5].iterrows():
+        description = row['Description']
+        title = row['Title']
+        result = getGenres(description)
+        print(f"TITLE: {title}\nOVERVIEW: {description}\n\nRESULT: {result}")
+        print("\n\n----------------------------\n\n")
     tasks = []
 
     for index, row in df.iterrows():
@@ -79,9 +85,32 @@ def main():
         endpoint="/v1/chat/completions",
         completion_window="24h"
     )
+    batch_job = client.batches.retrieve(batchJob.id)
+    print(batch_job)
+    resultFileId = batch_job.error_file_id or batch_job.output_file_id
+    result = client.files.content(resultFileId).content
 
+    resultFileName = "./data/results.jsonl"
+
+    with open(resultFileName, "wb") as file:
+        file.write(result)
     
+    results = []
 
+    with open(resultFileName, "r") as file:
+        for line in file:
+            jsonObject = json.loads(line.strip())
+            results.append(jsonObject)
+
+    for res in results[:5]:
+        taskId = res["custom_id"]
+        index = taskId.split("-")[-1]
+        result= res["response"]["body"]['choices']["0"]["message"]["content"]
+        movie = df.iloc[int(index)]
+        description = movie["Description"]
+        title = movie["Title"]
+        print(f"TITLE: {title}\nOVERVIEW: {description}\n\nRESULT: {result}")
+        print("\n\n----------------------------\n\n")
 
 
 
