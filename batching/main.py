@@ -3,6 +3,7 @@ from dotenv import load_dotenv
 import pandas as pd
 import json
 import os
+import time
 
 #Loading .env file
 load_dotenv()
@@ -58,7 +59,7 @@ def main():
             "url" : "/v1/chat/completions",
             "body" : {
                 "model" : "gpt-4o-mini",
-                "temperature" : "0.1",
+                "temperature" : 0.1,
                 "response_format" : {
                     "type" : "json_object"
                 },
@@ -85,9 +86,15 @@ def main():
         endpoint="/v1/chat/completions",
         completion_window="24h"
     )
-    batch_job = client.batches.retrieve(batchJob.id)
-    print(batch_job)
-    resultFileId = batch_job.error_file_id or batch_job.output_file_id
+    
+    while batchJob.status not in ["failed", "completed", "cancelled", "expired"]:
+        print(f"Current status is: {batchJob.status}\n Checkin' again in 3 seconds....................")
+        time.sleep(3)
+        batchJob = client.batches.retrieve(batchJob.id)
+    print(batchJob.output_file_id)
+    resultFileId =batchJob.output_file_id
+    if not resultFileId:
+        return print("Result file fucked up")
     result = client.files.content(resultFileId).content
 
     resultFileName = "./data/results.jsonl"
@@ -105,12 +112,13 @@ def main():
     for res in results[:5]:
         taskId = res["custom_id"]
         index = taskId.split("-")[-1]
-        result= res["response"]["body"]['choices']["0"]["message"]["content"]
+        result= res['response']['body']['choices'][0]['message']['content']
         movie = df.iloc[int(index)]
         description = movie["Description"]
         title = movie["Title"]
         print(f"TITLE: {title}\nOVERVIEW: {description}\n\nRESULT: {result}")
         print("\n\n----------------------------\n\n")
+
 
 
 
