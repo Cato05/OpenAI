@@ -1,2 +1,19 @@
-{"custom_id": "request-1", "method": "POST", "url": "/v1/chat/completions", "body": {"model": "gpt-3.5-turbo-0125", "messages": [{"role": "system", "content": "You are a helpful assistant."},{"role": "user", "content": "Hello world!"}],"max_tokens": 1000}}
-{"custom_id": "request-2", "method": "POST", "url": "/v1/chat/completions", "body": {"model": "gpt-3.5-turbo-0125", "messages": [{"role": "system", "content": "You are an unhelpful assistant."},{"role": "user", "content": "Hello world!"}],"max_tokens": 1000}}
+{
+    "categories": ["Fantasy", "Adventure", "Action", "Drama"],
+    "summary": "Gandalf and Aragorn unite the forces of Men to distract Sauron while Frodo and Sam undertake their perilous journey to destroy the One Ring."
+}{
+    "categories": ["Drama", "Crime"],
+    "summary": "Two imprisoned men develop a deep friendship and find hope and redemption through their shared experiences."
+}{
+    "categories": ["Crime", "Drama", "Thriller"],
+    "summary": "An aging crime lord hands over his empire to his hesitant son amidst family and criminal challenges."
+}{
+    "categories": ["Action", "Crime", "Drama", "Thriller"],
+    "summary": "Batman faces a formidable challenge as the Joker unleashes chaos in Gotham, testing his resolve to fight injustice."
+}{
+    "categories": ["Crime", "Drama", "Thriller"],
+    "summary": "The film explores Vito Corleone's rise in the 1920s New York crime scene and his son Michael's consolidation of power within the family syndicate."
+}{
+    "categories": ["Fantasy", "Adventure", "Action", "Drama"],
+    "summary": "Gandalf and Aragorn unite the forces of Men to distract Sauron while Frodo and Sam embark on a perilous journey to destroy the One Ring."
+}

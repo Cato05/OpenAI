@@ -36,20 +36,51 @@ def getGenres(description):
     )
     return response.choices[0].message.content
 
+def deleteInputFile():
+    with open("./input.jsonl", "w") as file:
+        file.write("")
 
 
 def main():
-    for _,row in df[:5].iterrows():
-        description = row['Description']
-        title = row['Title']
-        result = getGenres(description)
-        print(f"Title \t Overview \t Result \t")
-        print("====================================")
-        print(f"{title} \n {description} \n {result}")
+    tasks = []
 
+    for index, row in df.iterrows():
+        description = row["Description"]
+        task = {
+            "custom_id" : f"task-{index}",
+            "method" : "POST",
+            "url" : "/v1/chat/completions",
+            "body" : {
+                "model" : "gpt-4o-mini",
+                "temperature" : "0.1",
+                "response_format" : {
+                    "type" : "json_object"
+                },
+            "messages" :[ 
+                {"role" : "system", "content" : system},
+                {"role" : "user", "content" : description}
+                ],
+             },
+        }
+    tasks.append(task)
 
+    fileName = "data/batchedMovies.jsonl"
+    with open(fileName, "w") as file:
+        for obj in tasks:
+            file.write(json.dumps(obj) + "\n")
 
+    batchFile = client.files.create(
+        file=open(fileName, "rb"),
+        purpose = "batch"
+    )
 
+    batchJob = client.batches.create(
+        input_file_id=batchFile.id,
+        endpoint="/v1/chat/completions",
+        completion_window="24h"
+    )
+
+    
 
 
 
