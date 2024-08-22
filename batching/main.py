@@ -67,7 +67,7 @@ def main():
     #Creating tasks list for the batches
     tasks = []
 
-    #Looping through the csv file and creating
+    #Looping through the csv file and creating a task
     for index, row in df.iterrows():
         #Getting the description of the movie
         description = row["Description"]
@@ -169,6 +169,7 @@ def main():
         #Printing out the data we got from the results file
         print(f"TITLE: {title}\nOVERVIEW: {description}\n\nRESULT: {result}")
         print("\n\n----------------------------\n\n")
+        print(2)
 
 
 
